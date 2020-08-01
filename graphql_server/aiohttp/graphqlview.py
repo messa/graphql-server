@@ -1,3 +1,4 @@
+from asyncio import iscoroutine
 import copy
 from collections.abc import MutableMapping
 from functools import partial
@@ -152,7 +153,7 @@ class GraphQLView:
             )
 
             exec_res = (
-                [await ex for ex in execution_results]
+                [(await ex if iscoroutine(ex) else ex) for ex in execution_results]
                 if self.enable_async
                 else execution_results
             )
